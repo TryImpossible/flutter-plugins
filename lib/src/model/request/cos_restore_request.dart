@@ -2,7 +2,7 @@ import 'package:xml/xml.dart';
 
 class COSRestoreRequest {
   num days;
-  CASJobParameters casJobParameters;
+  COSCASJobParameters casJobParameters;
 
   XmlDocument toXml() {
     final XmlBuilder builder = XmlBuilder();
@@ -22,7 +22,7 @@ class COSRestoreRequest {
   });
 }
 
-class CASJobParameters {
+class COSCASJobParameters {
   String tier;
 
   XmlDocument toXml() {
@@ -37,5 +37,5 @@ class CASJobParameters {
     return toXml().toXmlString();
   }
 
-  CASJobParameters({required this.tier});
+  COSCASJobParameters({required this.tier});
 }
