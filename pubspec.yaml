@@ -1,5 +1,5 @@
 name: tencent_cos_plus
-description: A starting point for Dart libraries or applications.
+description: A powerful tencent cos plugin, support bucket and object basic api.
 version: 1.0.0
 # homepage: https://www.example.com
 
