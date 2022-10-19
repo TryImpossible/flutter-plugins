@@ -105,7 +105,7 @@ packages:
       name: http
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.13.3"
+    version: "0.13.5"
   http_multi_server:
     dependency: transitive
     description:
@@ -189,14 +189,7 @@ packages:
       name: path
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.8.1"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.11.1"
+    version: "1.8.2"
   petitparser:
     dependency: transitive
     description:
