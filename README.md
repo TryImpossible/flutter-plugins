@@ -2,11 +2,11 @@
 
 ## 功能
 
-- 支持`Bucket`接口的基本操作，增加、删除、查询桶等
+- 支持`Bucket`接口的基本操作，增加、删除、查询存储桶等
 - 支持`Bucket`接口的访问控制(acl)
 - 支持`Bucket`接口的跨域资源共享(cors)
 - 支持`Bucket`接口的防盗链(referer)
-- 支持`Object`接口的基本操作，上传、删除、查询对象等
+- 支持`Object`接口的基本操作，上传、删除、查询存储对象等
 - 支持`Object`接口的访问控制(acl)
 - 支持扩展其它接口
 
@@ -310,6 +310,11 @@ COSApiFactory.get<XXXApi>(key)
 ```
 
 ## 其它
+
+[CSDN](https://blog.csdn.net/Ctrl_S/article/details/127407268?spm=1001.2014.3001.5502)
+
+[掘金](https://juejin.cn/post/7156105555067535373)
+
 [issues](https://github.com/TryImpossible/flutter-diy/issues)
 
 如果遇到问题，请及时向我们反馈。若此插件对您产生帮助，麻烦为我点亮⭐⭐⭐
