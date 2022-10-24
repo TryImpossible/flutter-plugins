@@ -89,19 +89,20 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
     String? bucketName,
     String? region,
     required String objectKey,
-    required String filePath,
+    String? filePath,
     Map<String, String> headers = const <String, String>{},
   }) async {
-    final File file = File(filePath);
-    final Uint8List bytes = file.readAsBytesSync();
-    final String length = bytes.length.toString();
-    final String md5String =
-        Base64Encoder().convert(md5.convert(bytes).bytes).toString();
-
     final Map<String, String> newHeaders = Map.of(headers);
-    newHeaders['Content-Type'] = lookupMimeType(filePath) ?? '';
-    newHeaders['Content-Length'] = length;
-    newHeaders['Content-MD5'] = md5String;
+    Uint8List? bytes;
+    if (filePath?.isNotEmpty ?? false) {
+      bytes = File(filePath!).readAsBytesSync();
+      final String length = bytes.length.toString();
+      final String md5String =
+          Base64Encoder().convert(md5.convert(bytes).bytes).toString();
+      newHeaders['Content-Type'] = lookupMimeType(filePath) ?? '';
+      newHeaders['Content-Length'] = length;
+      newHeaders['Content-MD5'] = md5String;
+    }
     final Response response = await client.put(
       '${getBaseApiUrl(bucketName, region)}/$objectKey',
       headers: newHeaders,
