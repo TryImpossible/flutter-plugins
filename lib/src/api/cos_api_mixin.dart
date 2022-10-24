@@ -12,8 +12,10 @@ typedef XmlConverter<T> = T Function(XmlElement data);
 /// xml 解析结果
 typedef XmlConverterResult<T> = T Function(XmlConverter<T> converter);
 
+/// COSMinix类
 mixin COSApiMixin on COSAbstractApi {
   /// 将 response 转化成 xml
+  /// [response] http response
   XmlConverterResult<T> toXml<T>(Response response) {
     final String xmlString = utf8.decode(toValidation(response).bodyBytes);
     final XmlDocument xmlDocument = XmlDocument.parse(xmlString);
@@ -25,6 +27,7 @@ mixin COSApiMixin on COSAbstractApi {
   }
 
   /// 验证 response 是否有效
+  /// [response] http response
   Response toValidation(Response response) {
     if (_validateStatus(response.statusCode)) {
       return response;
@@ -33,6 +36,7 @@ mixin COSApiMixin on COSAbstractApi {
   }
 
   /// 验证 http 状态
+  /// [statusCode] http code
   bool _validateStatus(int statusCode) {
     return statusCode >= 200 && statusCode < 300;
   }

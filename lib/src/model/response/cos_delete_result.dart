@@ -1,10 +1,8 @@
 import 'package:xml/xml.dart';
 
-import '../common/cos_common.dart';
-
 class COSDeleteResult {
   List<COSDeleted>? deleteds;
-  Error? error;
+  COSDeleteError? error;
 
   COSDeleteResult();
 
@@ -14,7 +12,7 @@ class COSDeleteResult {
           ?.findElements('Deleted')
           .map((XmlElement xmlElement) => COSDeleted.fromXml(xmlElement))
           .toList()
-      ..error = Error.fromXml(xml?.getElement('Error'));
+      ..error = COSDeleteError.fromXml(xml?.getElement('Error'));
   }
 }
 
@@ -33,5 +31,23 @@ class COSDeleted {
       ..deleteMarkerVersionId =
           xml?.getElement('DeleteMarkerVersionId')?.innerText
       ..versionId = xml?.getElement('VersionId')?.innerText;
+  }
+}
+
+
+class COSDeleteError {
+  String? key;
+  String? versionId;
+  String? code;
+  String? message;
+
+  COSDeleteError();
+
+  factory COSDeleteError.fromXml(XmlElement? xml) {
+    return COSDeleteError()
+      ..key = xml?.getElement('Key')?.innerText
+      ..versionId = xml?.getElement('VersionId')?.innerText
+      ..code = xml?.getElement('Code')?.innerText
+      ..message = xml?.getElement('Message')?.innerText;
   }
 }

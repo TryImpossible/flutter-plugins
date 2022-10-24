@@ -15,38 +15,43 @@ class COSClient extends _COSClientBase {
 
   COSClient._internal(super.config);
 
-  Future<Response> put(
-    String url, {
+  /// PUT
+  /// [url] 请求地址
+  /// [headers] 请求头
+  /// [body] 请求体
+  Future<Response> put(String url, {
     Map<String, String>? headers,
     Object? body,
-    Encoding? encoding,
   }) {
     return _request(
       method: 'put',
       url: url,
       headers: headers,
       body: body,
-      encoding: encoding,
     );
   }
 
-  Future<Response> post(
-    String url, {
+  /// POST
+  /// [url] 请求地址
+  /// [headers] 请求头
+  /// [body] 请求体
+  Future<Response> post(String url, {
     Map<String, String>? headers,
     Object? body,
-    Encoding? encoding,
   }) {
     return _request(
       method: 'post',
       url: url,
       headers: headers,
       body: body,
-      encoding: encoding,
     );
   }
 
-  Future<Response> get(
-    String url, {
+  /// GET
+  /// [url] 请求地址
+  /// [headers] 请求头
+  /// [queryParameters] 请求参数
+  Future<Response> get(String url, {
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
   }) {
@@ -58,8 +63,11 @@ class COSClient extends _COSClientBase {
     );
   }
 
-  Future<Response> head(
-    String url, {
+  /// HEAD
+  /// [url] 请求地址
+  /// [headers] 请求头
+  /// [queryParameters] 请求参数
+  Future<Response> head(String url, {
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
   }) {
@@ -71,24 +79,29 @@ class COSClient extends _COSClientBase {
     );
   }
 
-  Future<Response> delete(
-    String url, {
+  /// DELETE
+  /// [url] 请求地址
+  /// [headers] 请求头
+  /// [queryParameters] 请求参数
+  /// [body] 请求体
+  Future<Response> delete(String url, {
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
     Object? body,
-    Encoding? encoding,
   }) {
     return _request(
       method: 'delete',
       url: url,
       headers: headers,
       body: body,
-      encoding: encoding,
     );
   }
 
-  Future<Response> options(
-    String url, {
+  /// OPTIONS
+  /// [url] 请求地址
+  /// [headers] 请求头
+  /// [queryParameters] 请求参数
+  Future<Response> options(String url, {
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
   }) {
@@ -107,44 +120,78 @@ class _COSClientBase {
   final COSConfig config;
   final Client _client;
 
-  /// 请求
+  /// request
+  /// [method] 请求方式
+  /// [url] 请求地址
+  /// [headers] 请求头
+  /// [queryParameters] 请求参数
+  /// [body] 请求体
   Future<Response> _request({
     required String method,
     required String url,
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
     Object? body,
-    Encoding? encoding,
   }) async {
+    final Uri uri = _joinUri(url, queryParameters);
+
+    final Request request = Request(method, uri);
+
+    _setHeaders(request, headers);
+
+    _setBody(request, body);
+
+    return Response.fromStream(await _client.send(request));
+  }
+
+  /// 拼接uri
+  /// [url] 请求地址
+  /// [queryParameters] 请求参数
+  Uri _joinUri(String url, Map<String, String>? queryParameters) {
     String uriString = url;
     if (queryParameters != null && queryParameters.isNotEmpty) {
       if (uriString.contains('?')) {
         uriString += '&';
+      } else {
+        uriString += '?';
       }
-      uriString = queryParameters.keys.fold('$uriString?',
-          (String previousValue, String element) {
-        return '$previousValue$element=${queryParameters[element]}&';
-      });
+      uriString = queryParameters.keys.fold(uriString,
+              (String previousValue, String element) {
+            return '$previousValue$element=${queryParameters[element]}&';
+          });
       uriString = uriString.substring(0, uriString.length - 1);
     }
     final Uri uri = Uri.parse(uriString);
+    return uri;
+  }
 
-    final Request request = Request(method, uri);
+  /// 设置headers
+  /// [request] http request
+  /// [headers] 请求头
+  void _setHeaders(Request request, Map<String, String>? headers) {
+    final Uri uri = request.url;
 
     if (headers != null && headers.isNotEmpty) {
       request.headers.addAll(headers);
     }
     request.headers['Host'] = uri.authority;
     request.headers['Date'] = formatHttpDate(DateTime.now());
+
     final String authorization = _generateSign(
-      method: method,
+      method: request.method,
       path: uri.path,
       headers: request.headers,
       queryParameters: uri.queryParameters,
     );
-    request.headers['Authorization'] = authorization;
 
-    if (encoding != null) request.encoding = encoding;
+    request.headers['Authorization'] = authorization;
+  }
+
+  /// 设置body
+  /// [request] http request
+  /// [body] 请求体
+  void _setBody(Request request, Object? body) {
+    // if (encoding != null) request.encoding = encoding;
 
     if (body != null) {
       if (body is String) {
@@ -157,11 +204,13 @@ class _COSClientBase {
         throw ArgumentError('Invalid request body "$body".');
       }
     }
-
-    return Response.fromStream(await _client.send(request));
   }
 
   /// 签名
+  /// [method] 请求方式
+  /// [path] 请求路径
+  /// [headers] 请求头
+  /// [queryParameters] 请求参数
   String _generateSign({
     required String method,
     String path = '',
@@ -169,7 +218,9 @@ class _COSClientBase {
     Map<String, String>? queryParameters,
   }) {
     // 1. 生成 KeyTime
-    final int startTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    final int startTime = DateTime
+        .now()
+        .millisecondsSinceEpoch ~/ 1000;
     final int endTime = startTime + 1000 * 60;
     String keyTime = '$startTime;$endTime';
 
@@ -180,13 +231,13 @@ class _COSClientBase {
     String urlParamList = '';
     String httpParameters = '';
     if (queryParameters?.isNotEmpty ?? false) {
-      final List<String> params = _processParams(queryParameters!);
+      final List<String> params = _joinParams(queryParameters!);
       urlParamList = params[0];
       httpParameters = params[1];
     }
 
     // 4. 生成 HeaderList 和 HttpHeaders
-    final List<String> params = _processParams(headers);
+    final List<String> params = _joinParams(headers);
     final String headerList = params[0];
     final String httpHeaders = params[1];
 
@@ -202,45 +253,38 @@ class _COSClientBase {
     final String signature = _hmacSha1(signKey, stringToSign);
 
     /// 8. 生成签名
-    final StringBuffer result = StringBuffer('q-sign-algorithm=sha1');
-    result
-      ..write('&q-ak=${config.secretId}')
-      ..write('&q-sign-time=$keyTime')
-      ..write('&q-key-time=$keyTime')
-      ..write('&q-header-list=$headerList')
-      ..write('&q-url-param-list=$urlParamList')
-      ..write('&q-signature=$signature');
+    final StringBuffer result = StringBuffer('q-sign-algorithm=sha1')
+      ..write('&q-ak=${config.secretId}')..write(
+          '&q-sign-time=$keyTime')..write('&q-key-time=$keyTime')..write(
+          '&q-header-list=$headerList')..write(
+          '&q-url-param-list=$urlParamList')..write('&q-signature=$signature');
     return result.toString();
   }
 
   /// hmacSha1加密
+  /// [key] 密钥
+  /// [value] 加密内容
   String _hmacSha1(String key, String value) {
     return Hmac(sha1, key.codeUnits).convert(value.codeUnits).toString();
   }
 
-  /// 处理参数拼接
-  List<String> _processParams(Map<String, String> params) {
+  /// 拼接参数
+  /// [params] 参数
+  List<String> _joinParams(Map<String, String> params) {
     final SplayTreeMap<String, String> sortedMap = SplayTreeMap.from(params);
-    final StringBuffer paramListBuffer = StringBuffer();
-    final StringBuffer httpParamsBuffer = StringBuffer();
-    for (int i = 0; i < sortedMap.keys.length; i++) {
-      String key = sortedMap.keys.elementAt(i);
-      key = Uri.encodeComponent(key).toLowerCase();
-      String value = sortedMap.values.elementAt(i);
-      value = Uri.encodeComponent(value);
-
-      paramListBuffer.write(key);
-      httpParamsBuffer
-        ..write(key)
-        ..write('=')
-        ..write(value);
-      if (i < sortedMap.keys.length - 1) {
-        paramListBuffer.write(';');
-        httpParamsBuffer.write('&');
-      }
-    }
-    final String paramList = paramListBuffer.toString();
-    final String httpParams = httpParamsBuffer.toString();
-    return [paramList, httpParams];
+    final List<String> paramLists = <String>[];
+    final List<String> httpParams = <String>[];
+    sortedMap.map((String key, String value) {
+      return MapEntry(
+        Uri.encodeComponent(key).toLowerCase(),
+        Uri.encodeComponent(value),
+      );
+    }).forEach((key, value) {
+      paramLists.add(key);
+      httpParams.add('$key=$value');
+    });
+    final String paramListString = paramLists.join(';');
+    final String httpParamsString = httpParams.join('&');
+    return <String>[paramListString, httpParamsString];
   }
 }

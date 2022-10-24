@@ -1,6 +1,8 @@
 import '../client/client.dart';
 import '../model/model.dart' show COSConfig;
 
+/// COSApi抽象类
+/// 提取公共实例参数
 abstract class COSAbstractApi {
   COSAbstractApi(this.config) : _client = COSClient(config);
 

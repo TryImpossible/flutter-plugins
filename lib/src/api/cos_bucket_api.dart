@@ -22,13 +22,16 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
   /// 地域信息，枚举值可参见 可用地域 文档，例如：ap-beijing、ap-hongkong、eu-frankfurt 等
   final String region;
 
+  /// 拼接BaseApiUrl
+  /// [bucketName] 存储桶
+  /// [region] 区域信息
   String getBaseApiUrl([String? bucketName, String? region]) {
     return 'https://${bucketName ?? this.bucketName}-${config.appId}.cos.'
         '${region ?? this.region}.myqcloud.com';
   }
 
-  ///
   /// GET Service 接口是用来查询请求者名下的所有存储桶列表或特定地域下的存储桶列表
+  /// [region]
   Future<COSListAllMyBucketsResult> getService({String? region}) async {
     String authority = 'service.cos.myqcloud.com';
     if (region?.isNotEmpty ?? false) {
@@ -40,7 +43,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
         COSListAllMyBucketsResult.fromXml);
   }
 
-  ///
   /// PUT Bucket 接口请求可以在指定账号下创建一个存储桶
   Future<Response> putBucket({
     required String bucketName,
@@ -49,7 +51,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
     bool isMAZ = false,
   }) async {
     final Map<String, String> newHeaders = Map.of(headers);
-    newHeaders['Content-Length'] = '0';
     String? xmlString;
     if (isMAZ) {
       xmlString = COSCreateBucketConfiguration().toXmlString();
@@ -70,7 +71,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
     return toValidation(response);
   }
 
-  // ///
   // /// GET Bucket 请求等同于 List Objects 请求，可以列出该存储桶内的部分或者全部对象。
   // Future<COSListBucketResult> getBucket({
   //   String? bucketName,
@@ -94,7 +94,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
   //   return toXml<COSListBucketResult>(response)(COSListBucketResult.fromXml);
   // }
 
-  ///
   /// HEAD Bucket 请求可以确认该存储桶是否存在，是否有权限访问
   Future<Response> headBucket({
     String? bucketName,
@@ -105,7 +104,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
     return toValidation(response);
   }
 
-  ///
   /// DELETE Bucket 请求用于删除指定的存储桶
   Future<Response> deleteBucket({
     String? bucketName,
@@ -116,7 +114,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
     return toValidation(response);
   }
 
-  // ///
   // /// GET Bucket Object versions 接口用于拉取存储桶内的所有对象及其历史版本信息，
   // /// 您可以通过指定参数筛选出存储桶内部分对象及其历史版本信息
   // Future<COSListVersionsResult> getBucketObjectVersions({
@@ -145,7 +142,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
   //       COSListVersionsResult.fromXml);
   // }
 
-  ///
   /// PUT Bucket acl 接口用来写入存储桶的访问控制列表（ACL），
   /// 您可以通过请求头 x-cos-acl 和 x-cos-grant-* 传入 ACL 信息，或者通过请求体以 XML 格式传入 ACL 信息。
   Future<Response> putBucketACL({
@@ -179,7 +175,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
     return toValidation(response);
   }
 
-  ///
   /// GET Bucket acl 接口用来获取存储桶的访问控制列表（ACL）
   Future<COSAccessControlPolicy> getBucketACL({
     String? bucketName,
@@ -191,7 +186,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
         COSAccessControlPolicy.fromXml);
   }
 
-  ///
   /// PUT Bucket cors 请求用于为存储桶配置跨域资源共享（CORS）访问控制，您可以通过传入 XML 格式的配置文件来实现配置，文件大小限制为64KB
   Future<Response> putBucketCORS({
     String? bucketName,
@@ -216,7 +210,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
     return toValidation(response);
   }
 
-  ///
   /// GET Bucket cors 请求用于查询存储桶的跨域资源共享（CORS）访问控制。
   Future<COSCORSConfiguration> getBucketCORS({
     String? bucketName,
@@ -227,7 +220,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
     return toXml<COSCORSConfiguration>(response)(COSCORSConfiguration.fromXml);
   }
 
-  ///
   /// DELETE Bucket cors 请求用于删除存储桶的跨域资源共享（CORS）访问控制。
   Future<Response> deleteBucketCORS({
     String? bucketName,
@@ -238,7 +230,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
     return toValidation(response);
   }
 
-  ///
   /// PUT Bucket referer 接口用于为存储桶设置 Referer 白名单或者黑名单。
   Future<Response> putBucketReferer({
     String? bucketName,
@@ -263,7 +254,6 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
     return toValidation(response);
   }
 
-  ///
   /// GET Bucket referer 接口用于读取存储桶 Referer 白名单或者黑名单。
   Future<COSRefererConfiguration> getBucketReferer({
     String? bucketName,

@@ -3,6 +3,7 @@ import 'cos_abstract_api.dart';
 import 'cos_bucket_api.dart';
 import 'cos_object_api.dart';
 
+/// COSApi工厂类
 class COSApiFactory {
   COSApiFactory._internal();
 
@@ -33,6 +34,9 @@ class COSApiFactory {
   static COSConfig? _config;
 
   /// 初始化默认api
+  /// [config] cos配置
+  /// [bucketName] 存储桶名称
+  /// [region] 区域信息
   static void initialize({
     required COSConfig config,
     required String bucketName,
@@ -43,10 +47,17 @@ class COSApiFactory {
     createObjectApi(_keyCOSObjectApi, bucketName, region);
   }
 
+  /// 创建Api
+  /// [key] 唯一标识
+  /// [api] COSAbstractApi实例
   static void createApi(Symbol key, COSAbstractApi api) {
     _cosApis[key] = api;
   }
 
+  /// 创建BucketApi
+  /// [key] 唯一标识
+  /// [bucketName] 存储桶名称
+  /// [region] 区域信息
   static void createBucketApi(Symbol key, String bucketName, String region) {
     createApi(
       key,
@@ -54,6 +65,10 @@ class COSApiFactory {
     );
   }
 
+  /// 创建Api
+  /// [key] 唯一标识
+  /// [bucketName] 存储桶名称
+  /// [region] 区域信息
   static void createObjectApi(Symbol key, String bucketName, String region) {
     createApi(
       key,
@@ -62,6 +77,7 @@ class COSApiFactory {
   }
 
   /// 获取Api
+  /// [key] 唯一标识
   static T get<T extends COSAbstractApi>(Symbol key) {
     if (_cosApis.containsKey(key)) {
       return _cosApis[key]! as T;

@@ -69,19 +69,3 @@ class COSObject {
   }
 }
 
-class Error {
-  String? key;
-  String? versionId;
-  String? code;
-  String? message;
-
-  Error();
-
-  factory Error.fromXml(XmlElement? xml) {
-    return Error()
-      ..key = xml?.getElement('Key')?.innerText
-      ..versionId = xml?.getElement('VersionId')?.innerText
-      ..code = xml?.getElement('Code')?.innerText
-      ..message = xml?.getElement('Message')?.innerText;
-  }
-}
