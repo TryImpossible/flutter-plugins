@@ -171,4 +171,32 @@ void main() {
       fail('Did not expect a socket exception.');
     }
   });
+
+  test('PutBucketAccelerate Test', () async {
+    try {
+      final Response response =
+          await COSApiFactory.bucketApi.putBucketAccelerate(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        accelerateConfiguration: COSAccelerateConfiguration()
+          ..status = 'Enabled',
+      );
+      expect(response, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
+
+  test('GetBucketAccelerate Test', () async {
+    try {
+      final COSAccelerateConfiguration result =
+          await COSApiFactory.bucketApi.getBucketAccelerate(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
 }

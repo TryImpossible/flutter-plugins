@@ -179,4 +179,30 @@ void main() {
       fail('Did not expect a socket exception.');
     }
   });
+
+  test('UploadDirectory Test', () async {
+    try {
+      final bool result = await COSApiFactory.objectApi.uploadDirectory(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        directory: 'xxx',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
+
+  test('DeleteDirectory Test', () async {
+    try {
+      final bool result = await COSApiFactory.objectApi.deleteDirectory(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        directory: 'xxx',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
 }

@@ -310,7 +310,11 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
           return COSObject(key: content.key ?? '');
         }).toList();
         final COSDelete delete = COSDelete(quiet: false, objects: objects);
-        await deleteMultipleObjects(delete: delete);
+        await deleteMultipleObjects(
+          bucketName: bucketName,
+          region: region,
+          delete: delete,
+        );
         return true;
       } else {
         return false;
