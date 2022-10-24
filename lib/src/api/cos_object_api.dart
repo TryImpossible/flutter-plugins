@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart';
 import 'package:mime/mime.dart';
+import 'package:path/path.dart' as path;
 
 import '../model/model.dart';
 import 'cos_abstract_api.dart';
@@ -255,5 +256,67 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
       body: xmlString,
     );
     return toValidation(response);
+  }
+
+  /// 上传目录
+  Future<bool> uploadDirectory({
+    String? bucketName,
+    String? region,
+    required String directory,
+    Map<String, String> headers = const <String, String>{},
+  }) async {
+    try {
+      final List<FileSystemEntity> entities =
+          Directory(directory).listSync(recursive: true);
+      if (entities.isNotEmpty) {
+        final List<Future<void>> tasks =
+            entities.map<Future<void>>((FileSystemEntity entity) {
+          final String objectKey = path.relative(entity.path, from: directory);
+          final String? filePath =
+              FileSystemEntity.isFileSync(entity.path) ? entity.path : null;
+          return putObject(
+            bucketName: bucketName,
+            region: region,
+            objectKey: objectKey,
+            filePath: filePath,
+            headers: headers,
+          );
+        }).toList();
+        await Future.wait(tasks);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// 删除目录
+  Future<bool> deleteDirectory({
+    String? bucketName,
+    String? region,
+    required String directory,
+  }) async {
+    try {
+      final COSListBucketResult buckets = await listObjects(
+        bucketName: bucketName,
+        region: region,
+        prefix: directory,
+      );
+      if (buckets.contents?.isNotEmpty ?? false) {
+        final List<COSObject> objects =
+            buckets.contents!.map<COSObject>((COSContents content) {
+          return COSObject(key: content.key ?? '');
+        }).toList();
+        final COSDelete delete = COSDelete(quiet: false, objects: objects);
+        await deleteMultipleObjects(delete: delete);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (_) {
+      return false;
+    }
   }
 }

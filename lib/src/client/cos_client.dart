@@ -19,7 +19,8 @@ class COSClient extends _COSClientBase {
   /// [url] 请求地址
   /// [headers] 请求头
   /// [body] 请求体
-  Future<Response> put(String url, {
+  Future<Response> put(
+    String url, {
     Map<String, String>? headers,
     Object? body,
   }) {
@@ -35,7 +36,8 @@ class COSClient extends _COSClientBase {
   /// [url] 请求地址
   /// [headers] 请求头
   /// [body] 请求体
-  Future<Response> post(String url, {
+  Future<Response> post(
+    String url, {
     Map<String, String>? headers,
     Object? body,
   }) {
@@ -51,7 +53,8 @@ class COSClient extends _COSClientBase {
   /// [url] 请求地址
   /// [headers] 请求头
   /// [queryParameters] 请求参数
-  Future<Response> get(String url, {
+  Future<Response> get(
+    String url, {
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
   }) {
@@ -67,7 +70,8 @@ class COSClient extends _COSClientBase {
   /// [url] 请求地址
   /// [headers] 请求头
   /// [queryParameters] 请求参数
-  Future<Response> head(String url, {
+  Future<Response> head(
+    String url, {
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
   }) {
@@ -84,7 +88,8 @@ class COSClient extends _COSClientBase {
   /// [headers] 请求头
   /// [queryParameters] 请求参数
   /// [body] 请求体
-  Future<Response> delete(String url, {
+  Future<Response> delete(
+    String url, {
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
     Object? body,
@@ -101,7 +106,8 @@ class COSClient extends _COSClientBase {
   /// [url] 请求地址
   /// [headers] 请求头
   /// [queryParameters] 请求参数
-  Future<Response> options(String url, {
+  Future<Response> options(
+    String url, {
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
   }) {
@@ -156,9 +162,9 @@ class _COSClientBase {
         uriString += '?';
       }
       uriString = queryParameters.keys.fold(uriString,
-              (String previousValue, String element) {
-            return '$previousValue$element=${queryParameters[element]}&';
-          });
+          (String previousValue, String element) {
+        return '$previousValue$element=${queryParameters[element]}&';
+      });
       uriString = uriString.substring(0, uriString.length - 1);
     }
     final Uri uri = Uri.parse(uriString);
@@ -218,9 +224,7 @@ class _COSClientBase {
     Map<String, String>? queryParameters,
   }) {
     // 1. 生成 KeyTime
-    final int startTime = DateTime
-        .now()
-        .millisecondsSinceEpoch ~/ 1000;
+    final int startTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     final int endTime = startTime + 1000 * 60;
     String keyTime = '$startTime;$endTime';
 
@@ -254,10 +258,12 @@ class _COSClientBase {
 
     /// 8. 生成签名
     final StringBuffer result = StringBuffer('q-sign-algorithm=sha1')
-      ..write('&q-ak=${config.secretId}')..write(
-          '&q-sign-time=$keyTime')..write('&q-key-time=$keyTime')..write(
-          '&q-header-list=$headerList')..write(
-          '&q-url-param-list=$urlParamList')..write('&q-signature=$signature');
+      ..write('&q-ak=${config.secretId}')
+      ..write('&q-sign-time=$keyTime')
+      ..write('&q-key-time=$keyTime')
+      ..write('&q-header-list=$headerList')
+      ..write('&q-url-param-list=$urlParamList')
+      ..write('&q-signature=$signature');
     return result.toString();
   }
 
