@@ -11,6 +11,7 @@
 - 支持扩展其它接口
 
 ## 开始
+
 ```yaml
 dependencies:
   tencent_cos_plus: ^1.0.0
@@ -158,6 +159,28 @@ final COSRefererConfiguration result =
   );
 ```
 
+- 实现启用或者暂停存储桶的全球加速功能。
+
+```
+ final Response response =
+      await COSApiFactory.bucketApi.putBucketAccelerate(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    accelerateConfiguration: COSAccelerateConfiguration()
+      ..status = 'Enabled',
+    );
+```
+
+- 实现查询存储桶的全球加速功能配置。
+
+```
+final COSAccelerateConfiguration result =
+      await COSApiFactory.bucketApi.getBucketAccelerate(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+  );
+```
+
 ### Object 接口
 
 - 列出该存储桶内的部分或者全部对象
@@ -285,6 +308,26 @@ final Response result = await COSApiFactory.objectApi.postObjectRestore(
 );
 ```
 
+- 上传目录
+
+```
+ final bool result = await COSApiFactory.objectApi.uploadDirectory(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    directory: 'xxx',
+  );
+```
+
+- 删除目录
+
+```
+ final bool result = await COSApiFactory.objectApi.deleteDirectory(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    directory: 'xxx',
+  );
+```
+
 ### 扩展其它接口
 
 1. 实现具体Api
@@ -305,6 +348,7 @@ COSApiFactory.createApi(
 ```
 
 2. 使用具体Api
+
 ```
 COSApiFactory.get<XXXApi>(key)
 ```
@@ -315,6 +359,6 @@ COSApiFactory.get<XXXApi>(key)
 
 [掘金](https://juejin.cn/post/7156105555067535373)
 
-[issues](https://github.com/TryImpossible/flutter-diy/issues)
+[issues](https://github.com/TryImpossible/flutter_tencent_cos_plus/issues)
 
 如果遇到问题，请及时向我们反馈。若此插件对您产生帮助，麻烦为我点亮⭐⭐⭐
