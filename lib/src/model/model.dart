@@ -1,3 +1,4 @@
+export 'common/cos_accelerate_configuration.dart';
 export 'common/cos_access_control_policy.dart';
 export 'common/cos_common.dart';
 export 'common/cos_config.dart';

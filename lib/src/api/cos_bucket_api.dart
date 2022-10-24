@@ -264,4 +264,39 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
     return toXml<COSRefererConfiguration>(response)(
         COSRefererConfiguration.fromXml);
   }
+
+  /// PUT Bucket accelerate 接口实现启用或者暂停存储桶的全球加速功能。
+  Future<Response> putBucketAccelerate({
+    String? bucketName,
+    String? region,
+    required COSAccelerateConfiguration accelerateConfiguration,
+  }) async {
+    final Map<String, String> headers = <String, String>{};
+    final String xmlString = accelerateConfiguration.toXmlString();
+    // http 框架设置body时，会自动给 Content-Type 指定字符集为 charset=utf-8
+    // 设置 application/xml; charset=utf-8 保持一致
+    headers['Content-Type'] = 'application/xml; charset=utf-8';
+    headers['Content-Length'] = xmlString.length.toString();
+    final String md5String = Base64Encoder()
+        .convert(md5.convert(xmlString.codeUnits).bytes)
+        .toString();
+    headers['Content-MD5'] = md5String;
+    final Response response = await client.put(
+      '${getBaseApiUrl(bucketName, region)}/?accelerate',
+      headers: headers,
+      body: xmlString,
+    );
+    return toValidation(response);
+  }
+
+  /// GET Bucket accelerate 接口实现查询存储桶的全球加速功能配置。
+  Future<COSAccelerateConfiguration> getBucketAccelerate({
+    String? bucketName,
+    String? region,
+  }) async {
+    final Response response =
+        await client.get('${getBaseApiUrl(bucketName, region)}/?accelerate');
+    return toXml<COSAccelerateConfiguration>(response)(
+        COSAccelerateConfiguration.fromXml);
+  }
 }
