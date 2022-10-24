@@ -8,7 +8,7 @@ environment:
 
 dependencies:
  # https://pub.flutter-io.cn/packages/path
- path: ^1.8.2
+ path: ^1.8.1
  # https://pub.flutter-io.cn/packages/http
  http: ^0.13.5
  # https://pub.flutter-io.cn/packages/http_parser
