@@ -355,4 +355,59 @@ abstract class COSAbstractObjectApi extends COSAbstractApi with COSApiMixin {
       return false;
     }
   }
+
+  /// PUT Object acl 接口用来写入对象的访问控制列表（ACL），
+  /// 您可以通过请求头x-cos-acl和x-cos-grant-*传入 ACL 信息，或者通过请求体以 XML 格式传入 ACL 信息。
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [aclHeader]
+  /// [accessControlPolicy]
+  Future<Response> putObjectACL({
+    String? bucketName,
+    String? region,
+    required String objectKey,
+    COSACLHeader? aclHeader,
+    COSAccessControlPolicy? accessControlPolicy,
+  }) async {
+    Map<String, String>? headers;
+    if (aclHeader != null) {
+      headers ??= aclHeader.toMap();
+    }
+    String? xmlString;
+    if (accessControlPolicy != null) {
+      headers ??= <String, String>{};
+      xmlString = accessControlPolicy.toXmlString();
+      // http 框架设置body时，会自动给 Content-Type 指定字符集为 charset=utf-8
+      // 设置 application/xml; charset=utf-8 保持一致
+      headers['Content-Type'] = 'application/xml; charset=utf-8';
+      headers['Content-Length'] = xmlString.length.toString();
+      final String md5String = Base64Encoder()
+          .convert(md5.convert(xmlString.codeUnits).bytes)
+          .toString();
+      headers['Content-MD5'] = md5String;
+    }
+
+    final Response response = await client.put(
+      '${getBaseApiUrl(bucketName, region)}/$objectKey?acl',
+      headers: headers,
+      body: xmlString,
+    );
+    return toValidation(response);
+  }
+
+  /// GET Object acl 接口用来获取对象的访问控制列表（ACL）。该 API 的请求者需要对指定对象有读取 ACL 权限。
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  Future<COSAccessControlPolicy> getObjectACL({
+    String? bucketName,
+    String? region,
+    required String objectKey,
+  }) async {
+    final Response response =
+        await client.get('${getBaseApiUrl(bucketName, region)}/$objectKey?acl');
+    return toXml<COSAccessControlPolicy>(response)(
+        COSAccessControlPolicy.fromXml);
+  }
 }

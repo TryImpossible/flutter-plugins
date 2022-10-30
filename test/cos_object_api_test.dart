@@ -233,4 +233,32 @@ void main() {
       fail('Did not expect a socket exception.');
     }
   });
+
+  test('PutObjectACL Test', () async {
+    try {
+      final Response result = await COSApiFactory.objectApi.putObjectACL(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        objectKey: 'xxx',
+        aclHeader: COSACLHeader()..xCosAcl = 'public-read',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
+
+  test('GetObjectACL Test', () async {
+    try {
+      final COSAccessControlPolicy result =
+          await COSApiFactory.objectApi.getObjectACL(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        objectKey: 'xxx',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
 }
