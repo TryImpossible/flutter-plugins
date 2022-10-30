@@ -89,7 +89,7 @@ void main() {
           bucketName: 'xxx',
           region: 'xxx-xxx',
           objectKey: 'xxx',
-          getObject: COSGetObject()..responseCacheControl = 'xxx',
+          getObjectQuery: COSGetObjectQuery()..responseCacheControl = 'xxx',
         );
         expect(result, isNotNull);
       } on SocketException catch (_) {

@@ -1,5 +1,6 @@
 import 'package:http/http.dart';
 
+import '../../model/model.dart';
 import 'cos_abstract_object_api.dart';
 
 /// Object接口
@@ -23,6 +24,7 @@ class COSObjectApi extends COSAbstractObjectApi {
     String? region,
     required String objectKey,
     required String filePath,
+    COSACLHeader? aclHeader,
     Map<String, String> headers = const <String, String>{},
   }) {
     throw UnimplementedError(

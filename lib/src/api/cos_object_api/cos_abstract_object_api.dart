@@ -77,12 +77,16 @@ abstract class COSAbstractObjectApi extends COSAbstractApi with COSApiMixin {
     required String objectKey,
     List<int>? objectValue,
     String? contentType,
+    COSACLHeader? aclHeader,
     Map<String, String> headers = const <String, String>{},
   }) async {
     assert((objectValue != null && contentType == null) ||
         (objectValue == null && contentType != null));
 
     final Map<String, String> newHeaders = Map.of(headers);
+    if (aclHeader != null) {
+      newHeaders.addAll(aclHeader.toMap());
+    }
     if (objectValue != null && contentType != null) {
       final String md5String = Base64Encoder().convert(objectValue).toString();
       newHeaders['Content-Type'] = contentType;
@@ -110,9 +114,13 @@ abstract class COSAbstractObjectApi extends COSAbstractApi with COSApiMixin {
     required String objectKey,
     required String xCOSCopySource,
     required String contentType,
+    COSACLHeader? aclHeader,
     Map<String, String> headers = const <String, String>{},
   }) async {
     final Map<String, String> newHeaders = Map.of(headers);
+    if (aclHeader != null) {
+      newHeaders.addAll(aclHeader.toMap());
+    }
     newHeaders['x-cos-copy-source'] = xCOSCopySource;
     newHeaders['Content-Type'] = contentType;
     final Response response = await client.put(
@@ -126,18 +134,18 @@ abstract class COSAbstractObjectApi extends COSAbstractApi with COSApiMixin {
   /// [bucketName]
   /// [region]
   /// [objectKey]
-  /// [getObject]
+  /// [getObjectQuery]
   /// [headers]
   Future<Response> getObject({
     String? bucketName,
     String? region,
     required String objectKey,
-    COSGetObject? getObject,
+    COSGetObjectQuery? getObjectQuery,
     Map<String, String> headers = const <String, String>{},
   }) async {
     final Response response = await client.get(
       '${getBaseApiUrl(bucketName, region)}/$objectKey',
-      queryParameters: getObject?.toMap(),
+      queryParameters: getObjectQuery?.toMap(),
     );
     return toValidation(response);
   }
@@ -287,6 +295,7 @@ abstract class COSAbstractObjectApi extends COSAbstractApi with COSApiMixin {
     String? region,
     required String objectKey,
     required String filePath,
+    COSACLHeader? aclHeader,
     Map<String, String> headers = const <String, String>{},
   });
 
@@ -299,6 +308,7 @@ abstract class COSAbstractObjectApi extends COSAbstractApi with COSApiMixin {
     String? bucketName,
     String? region,
     required String objectKey,
+    COSACLHeader? aclHeader,
     Map<String, String> headers = const <String, String>{},
   }) {
     return putObject(

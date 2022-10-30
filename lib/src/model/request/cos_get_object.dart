@@ -1,5 +1,5 @@
-class COSGetObject {
-  COSGetObject({
+class COSGetObjectQuery {
+  COSGetObjectQuery({
     this.responseCacheControl,
     this.responseContentDisposition,
     this.responseContentEncoding,

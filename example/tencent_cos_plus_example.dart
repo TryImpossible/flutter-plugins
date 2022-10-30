@@ -52,7 +52,7 @@ Future<void> main() async {
     bucketName: 'xxx',
     region: 'xxx-xxx',
     objectKey: 'xxx',
-    getObject: COSGetObject()..responseCacheControl = 'xxx',
+    getObjectQuery: COSGetObjectQuery()..responseCacheControl = 'xxx',
   );
   File('xxx.png').writeAsBytesSync(result.bodyBytes);
 

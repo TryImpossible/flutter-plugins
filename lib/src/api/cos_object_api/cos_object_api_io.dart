@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 
+import '../../model/model.dart';
 import 'cos_abstract_object_api.dart';
 
 /// Object接口
@@ -28,6 +29,7 @@ class COSObjectApi extends COSAbstractObjectApi {
     String? region,
     required String objectKey,
     required String filePath,
+    COSACLHeader? aclHeader,
     Map<String, String> headers = const <String, String>{},
   }) {
     final Uint8List bytes = File(filePath).readAsBytesSync();
@@ -37,6 +39,7 @@ class COSObjectApi extends COSAbstractObjectApi {
       objectKey: objectKey,
       objectValue: bytes,
       contentType: lookupMimeType(filePath) ?? '',
+      aclHeader: aclHeader,
       headers: headers,
     );
   }
