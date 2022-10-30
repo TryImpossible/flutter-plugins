@@ -35,57 +35,45 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
   }
 
   /// GET Bucket 请求等同于 List Objects 请求，可以列出该存储桶内的部分或者全部对象。
+  /// [bucketName]
+  /// [region]
+  /// [listObjectHeader]
   Future<COSListBucketResult> listObjects({
     String? bucketName,
     String? region,
-    String? prefix,
-    String? delimiter,
-    String? encodingType,
-    String? marker,
-    int? maxKeys,
+    COSListObjectHeader? listObjectHeader,
   }) async {
     final Response response = await client.get(
       '${getBaseApiUrl(bucketName, region)}/',
-      queryParameters: <String, String>{
-        if (prefix != null) 'prefix': prefix,
-        if (delimiter != null) 'delimiter': delimiter,
-        if (encodingType != null) 'encoding-type': encodingType,
-        if (marker != null) 'marker': marker,
-        if (maxKeys != null) 'max-keys': maxKeys.toString(),
-      },
+      queryParameters: listObjectHeader?.toMap(),
     );
     return toXml<COSListBucketResult>(response)(COSListBucketResult.fromXml);
   }
 
   /// GET Bucket Object versions 接口用于拉取存储桶内的所有对象及其历史版本信息，
   /// 您可以通过指定参数筛选出存储桶内部分对象及其历史版本信息
+  /// [bucketName]
+  /// [region]
+  /// [listObjectHeader]
   Future<COSListVersionsResult> listObjectVersions({
     String? bucketName,
     String? region,
-    String? prefix,
-    String? delimiter,
-    String? encodingType,
-    String? marker,
-    String? versionIdMarker,
-    int? maxKeys,
+    COSListObjectHeader? listObjectHeader,
   }) async {
     final Response response = await client.get(
       '${getBaseApiUrl(bucketName, region)}/?versions',
-      queryParameters: <String, String>{
-        // 'versions': '',
-        if (prefix != null) 'prefix': prefix,
-        if (delimiter != null) 'delimiter': delimiter,
-        if (encodingType != null) 'encoding-type': encodingType,
-        if (marker != null) 'marker': marker,
-        if (versionIdMarker != null) 'version-id-marker': versionIdMarker,
-        if (maxKeys != null) 'max-keys': maxKeys.toString(),
-      },
+      queryParameters: listObjectHeader?.toMap(),
     );
     return toXml<COSListVersionsResult>(response)(
         COSListVersionsResult.fromXml);
   }
 
   /// PUT Object 接口请求可以将本地的对象（Object）上传至指定存储桶中
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [filePath]
+  /// [headers]
   Future<Response> putObject({
     String? bucketName,
     String? region,
@@ -113,6 +101,12 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
   }
 
   /// PUT Object - Copy 接口请求创建一个已存在 COS 的对象的副本，即将一个对象从源路径（对象键）复制到目标路径（对象键）
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [xCOSCopySource]
+  /// [contentType]
+  /// [headers]
   Future<COSCopyObjectResult> putObjectCopy({
     String? bucketName,
     String? region,
@@ -132,6 +126,11 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
   }
 
   /// GET Object GET Object 接口请求可以将 COS 存储桶中的对象（Object）下载至本地
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [getObject]
+  /// [headers]
   Future<Response> getObject({
     String? bucketName,
     String? region,
@@ -154,6 +153,11 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
   // }) async {}
 
   /// HEAD Object 接口请求可以判断指定对象是否存在和有权限，并在指定对象可访问时获取其元数据
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [versionId]
+  /// [headers]
   Future<Response> headObject({
     String? bucketName,
     String? region,
@@ -172,6 +176,10 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
   }
 
   /// DELETE Object 接口请求可以删除一个指定的对象（Object）
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [versionId]
   Future<Response> deleteObject({
     String? bucketName,
     String? region,
@@ -188,6 +196,9 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
   }
 
   /// DELETE Multiple Objects 接口请求可以批量删除指定存储桶中的多个对象（Object），单次请求支持最多删除1000个对象
+  /// [bucketName]
+  /// [region]
+  /// [delete]
   Future<COSDeleteResult> deleteMultipleObjects({
     String? bucketName,
     String? region,
@@ -212,6 +223,12 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
   }
 
   /// OPTIONS Object 用于跨域资源共享（CORS）的预检（Preflight）请求
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [origin]
+  /// [accessControlRequestMethod]
+  /// [accessControlRequestHeaders]
   Future<Response> optionsObject({
     String? bucketName,
     String? region,
@@ -235,6 +252,10 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
 
   /// POST Object restore 接口请求可以对一个归档存储或深度归档存储类型的对象进行恢复（解冻）
   /// 以便读取该对象内容，恢复出的可读取对象是临时的，您可以设置需要保持可读以及随后删除该临时副本的时间
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [restoreRequest]
   Future<Response> postObjectRestore({
     String? bucketName,
     String? region,
@@ -259,6 +280,10 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
   }
 
   /// 上传目录
+  /// [bucketName]
+  /// [region]
+  /// [directory]
+  /// [headers]
   Future<bool> uploadDirectory({
     String? bucketName,
     String? region,
@@ -293,6 +318,9 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
   }
 
   /// 删除目录
+  /// [bucketName]
+  /// [region]
+  /// [directory]
   Future<bool> deleteDirectory({
     String? bucketName,
     String? region,
@@ -302,7 +330,7 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
       final COSListBucketResult buckets = await listObjects(
         bucketName: bucketName,
         region: region,
-        prefix: directory,
+        listObjectHeader: COSListObjectHeader()..prefix = directory,
       );
       if (buckets.contents?.isNotEmpty ?? false) {
         final List<COSObject> objects =

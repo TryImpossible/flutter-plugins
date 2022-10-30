@@ -24,7 +24,7 @@ void main() {
             await COSApiFactory.objectApi.listObjects(
           bucketName: 'xxx',
           region: 'xxx-xxx',
-          prefix: 'xxx',
+          listObjectHeader: COSListObjectHeader()..prefix = 'xxx',
         );
         result.contents?.forEach((element) {
           print('${element.key}\b');
@@ -41,7 +41,7 @@ void main() {
             await COSApiFactory.objectApi.listObjectVersions(
           bucketName: 'xxx',
           region: 'xxx-xxx',
-          prefix: 'xxx',
+          listObjectHeader: COSListObjectHeader()..prefix = 'xxx',
         );
         result.versions?.forEach((element) {
           print('${element.key}\b');
@@ -122,11 +122,11 @@ void main() {
 
     test('DeleteMultipleObjects Test', () async {
       try {
-        var result;
+        dynamic result;
         result = await COSApiFactory.objectApi.listObjects(
           bucketName: 'xxx',
           region: 'xxx-xxx',
-          prefix: 'xxx',
+          listObjectHeader: COSListObjectHeader()..prefix = 'xxx',
         );
         final List<COSObject>? objects = (result as COSListBucketResult)
             .contents

@@ -1,4 +1,4 @@
-class COSBucketACLHeader {
+class COSACLHeader {
   String? xCosAcl;
   String? xCosGrantRead;
   String? xCosGrantWrite;

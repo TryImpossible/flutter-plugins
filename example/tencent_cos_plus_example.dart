@@ -11,7 +11,7 @@ Future<void> main() async {
     region: 'xxx-xxx',
   );
 
-  var result;
+  dynamic result;
 
   ///  查询请求者名下的所有存储桶列表或特定地域下的存储桶列表
   result = await COSApiFactory.bucketApi.getService(region: 'ap-guangzhou');
@@ -32,7 +32,7 @@ Future<void> main() async {
   result = await COSApiFactory.objectApi.listObjects(
     bucketName: 'xxx',
     region: 'xxx-xxx',
-    prefix: 'xxx',
+    listObjectHeader: COSListObjectHeader()..prefix = 'xxx',
   );
 
   /// 将本地的对象（Object）上传至指定存储桶中
@@ -60,7 +60,7 @@ Future<void> main() async {
   result = await COSApiFactory.objectApi.listObjects(
     bucketName: 'xxx',
     region: 'xxx-xxx',
-    prefix: 'xxx',
+    listObjectHeader: COSListObjectHeader()..prefix = 'xxx',
   );
   final List<COSObject>? objects = (result as COSListBucketResult)
       .contents
