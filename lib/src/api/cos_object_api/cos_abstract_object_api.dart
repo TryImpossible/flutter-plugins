@@ -1,20 +1,16 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart';
-import 'package:mime/mime.dart';
-import 'package:path/path.dart' as path;
 
-import '../model/model.dart';
-import 'cos_abstract_api.dart';
-import 'cos_api_mixin.dart';
+import '../../model/model.dart';
+import '../cos_abstract_api.dart';
+import '../cos_api_mixin.dart';
 
 /// Object接口
 /// https://cloud.tencent.com/document/product/436/7749
-class COSObjectApi extends COSAbstractApi with COSApiMixin {
-  COSObjectApi(
+abstract class COSAbstractObjectApi extends COSAbstractApi with COSApiMixin {
+  COSAbstractObjectApi(
     super.config, {
     required this.bucketName,
     required this.region,
@@ -72,30 +68,31 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
   /// [bucketName]
   /// [region]
   /// [objectKey]
-  /// [filePath]
+  /// [objectValue]
+  /// [contentType]
   /// [headers]
   Future<Response> putObject({
     String? bucketName,
     String? region,
     required String objectKey,
-    String? filePath,
+    List<int>? objectValue,
+    String? contentType,
     Map<String, String> headers = const <String, String>{},
   }) async {
+    assert((objectValue != null && contentType == null) ||
+        (objectValue == null && contentType != null));
+
     final Map<String, String> newHeaders = Map.of(headers);
-    Uint8List? bytes;
-    if (filePath?.isNotEmpty ?? false) {
-      bytes = File(filePath!).readAsBytesSync();
-      final String length = bytes.length.toString();
-      final String md5String =
-          Base64Encoder().convert(md5.convert(bytes).bytes).toString();
-      newHeaders['Content-Type'] = lookupMimeType(filePath) ?? '';
-      newHeaders['Content-Length'] = length;
+    if (objectValue != null && contentType != null) {
+      final String md5String = Base64Encoder().convert(objectValue).toString();
+      newHeaders['Content-Type'] = contentType;
+      newHeaders['Content-Length'] = objectValue.length.toString();
       newHeaders['Content-MD5'] = md5String;
     }
     final Response response = await client.put(
       '${getBaseApiUrl(bucketName, region)}/$objectKey',
       headers: newHeaders,
-      body: bytes,
+      body: objectValue,
     );
     return toValidation(response);
   }
@@ -279,43 +276,50 @@ class COSObjectApi extends COSAbstractApi with COSApiMixin {
     return toValidation(response);
   }
 
+  /// 上传文件对象
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [filePath]
+  /// [headers]
+  Future<Response> putFileObject({
+    String? bucketName,
+    String? region,
+    required String objectKey,
+    required String filePath,
+    Map<String, String> headers = const <String, String>{},
+  });
+
+  /// 上传文件夹对象
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [headers]
+  Future<Response> putFolderObject({
+    String? bucketName,
+    String? region,
+    required String objectKey,
+    Map<String, String> headers = const <String, String>{},
+  }) {
+    return putObject(
+      bucketName: bucketName,
+      region: region,
+      objectKey: objectKey,
+      headers: headers,
+    );
+  }
+
   /// 上传目录
   /// [bucketName]
   /// [region]
   /// [directory]
   /// [headers]
-  Future<bool> uploadDirectory({
+  Future<bool> putDirectory({
     String? bucketName,
     String? region,
     required String directory,
     Map<String, String> headers = const <String, String>{},
-  }) async {
-    try {
-      final List<FileSystemEntity> entities =
-          Directory(directory).listSync(recursive: true);
-      if (entities.isNotEmpty) {
-        final List<Future<void>> tasks =
-            entities.map<Future<void>>((FileSystemEntity entity) {
-          final String objectKey = path.relative(entity.path, from: directory);
-          final String? filePath =
-              FileSystemEntity.isFileSync(entity.path) ? entity.path : null;
-          return putObject(
-            bucketName: bucketName,
-            region: region,
-            objectKey: objectKey,
-            filePath: filePath,
-            headers: headers,
-          );
-        }).toList();
-        await Future.wait(tasks);
-        return true;
-      } else {
-        return false;
-      }
-    } catch (_) {
-      return false;
-    }
-  }
+  });
 
   /// 删除目录
   /// [bucketName]

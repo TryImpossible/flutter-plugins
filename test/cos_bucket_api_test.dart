@@ -36,6 +36,7 @@ void main() {
         final Response result = await COSApiFactory.bucketApi.putBucket(
           bucketName: 'xxx',
           region: 'xxx-xxx',
+          aclHeader: COSACLHeader()..xCosAcl = 'public-read',
         );
         expect(result, isNotNull);
       } on SocketException catch (_) {

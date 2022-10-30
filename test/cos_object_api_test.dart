@@ -57,8 +57,9 @@ void main() {
         final Response result = await COSApiFactory.objectApi.putObject(
           bucketName: 'xxx',
           region: 'xxx-xxx',
-          objectKey: 'xxx',
-          filePath: 'xxx',
+          objectKey: 'xxx.png',
+          objectValue: File('xxx.png').readAsBytesSync(),
+          contentType: 'image/png',
         );
         expect(result, isNotNull);
       } on SocketException catch (_) {
@@ -180,12 +181,39 @@ void main() {
     }
   });
 
-  test('UploadDirectory Test', () async {
+  test('PutFileObject Test', () async {
     try {
-      final bool result = await COSApiFactory.objectApi.uploadDirectory(
+      final Response result = await COSApiFactory.objectApi.putFileObject(
         bucketName: 'xxx',
         region: 'xxx-xxx',
-        directory: 'xxx',
+        objectKey: 'xxx.png',
+        filePath: 'xxx.png',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
+
+  test('PutFolderObject Test', () async {
+    try {
+      final Response result = await COSApiFactory.objectApi.putFolderObject(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        objectKey: '/folder',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
+
+  test('UploadDirectory Test', () async {
+    try {
+      final bool result = await COSApiFactory.objectApi.putDirectory(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        directory: '/directory',
       );
       expect(result, isNotNull);
     } on SocketException catch (_) {
@@ -198,7 +226,7 @@ void main() {
       final bool result = await COSApiFactory.objectApi.deleteDirectory(
         bucketName: 'xxx',
         region: 'xxx-xxx',
-        directory: 'xxx',
+        directory: '/directory',
       );
       expect(result, isNotNull);
     } on SocketException catch (_) {

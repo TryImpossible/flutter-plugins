@@ -1,7 +1,7 @@
 import '../model/model.dart' show COSConfig;
 import 'cos_abstract_api.dart';
 import 'cos_bucket_api.dart';
-import 'cos_object_api.dart';
+import 'cos_object_api/cos_object_api.dart';
 
 /// COSApi工厂类
 class COSApiFactory {

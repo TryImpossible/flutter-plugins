@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:tencent_cos_plus/tencent_cos_plus.dart';
 
 Future<void> main() async {
@@ -23,6 +25,7 @@ Future<void> main() async {
   result = await COSApiFactory.bucketApi.putBucket(
     bucketName: 'xxx',
     region: 'xxx-xxx',
+    aclHeader: COSACLHeader()..xCosAcl = 'public-read',
   );
 
   /// 删除指定的存储桶
@@ -39,8 +42,9 @@ Future<void> main() async {
   result = await COSApiFactory.objectApi.putObject(
     bucketName: 'xxx',
     region: 'xxx-xxx',
-    objectKey: 'xxx',
-    filePath: 'xxx',
+    objectKey: 'xxx.png',
+    objectValue: File('xxx.png').readAsBytesSync(),
+    contentType: 'image/png',
   );
 
   /// 将 COS 存储桶中的对象（Object）下载至本地
@@ -50,6 +54,7 @@ Future<void> main() async {
     objectKey: 'xxx',
     getObject: COSGetObject()..responseCacheControl = 'xxx',
   );
+  File('xxx.png').writeAsBytesSync(result.bodyBytes);
 
   /// 删除一个指定的对象（Object）
   result = await COSApiFactory.objectApi.deleteObject(
@@ -74,5 +79,34 @@ Future<void> main() async {
     bucketName: 'xxx',
     region: 'xxx-xxx',
     delete: delete,
+  );
+
+  /// 上传文件对象
+  result = await COSApiFactory.objectApi.putFileObject(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    objectKey: 'xxx.png',
+    filePath: 'xxx.png',
+  );
+
+  /// 上传文件夹对象
+  result = await COSApiFactory.objectApi.putFolderObject(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    objectKey: '/folder',
+  );
+
+  /// 上传目录
+  result = await COSApiFactory.objectApi.putDirectory(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    directory: '/directory',
+  );
+
+  /// 删除目录
+  result = await COSApiFactory.objectApi.deleteDirectory(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    directory: '/directory',
   );
 }
