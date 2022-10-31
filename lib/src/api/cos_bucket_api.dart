@@ -245,6 +245,59 @@ class COSBucketApi extends COSAbstractApi with COSApiMixin {
         COSRefererConfiguration.fromXml);
   }
 
+  /// COS 支持为已存在的对象设置标签。PUT Object tagging 接口通过为对象添加键值对作为对象标签，可以协助您分组管理已有的对象资源
+  /// [bucketName]
+  /// [region]
+  /// [tagging]
+  Future<Response> putBucketTagging({
+    String? bucketName,
+    String? region,
+    required COSTagging tagging,
+  }) async {
+    final Map<String, String> headers = <String, String>{};
+    final String xmlString = tagging.toXmlString();
+    // http 框架设置body时，会自动给 Content-Type 指定字符集为 charset=utf-8
+    // 设置 application/xml; charset=utf-8 保持一致
+    headers['Content-Type'] = 'application/xml; charset=utf-8';
+    headers['Content-Length'] = xmlString.length.toString();
+    final String md5String = Base64Encoder()
+        .convert(md5.convert(xmlString.codeUnits).bytes)
+        .toString();
+    headers['Content-MD5'] = md5String;
+    final Response response = await client.put(
+      '${getBaseApiUrl(bucketName, region)}/?tagging',
+      headers: headers,
+      body: xmlString,
+    );
+    return toValidation(response);
+  }
+
+  /// COS 支持为已存在的存储桶查询标签（Tag）。
+  /// GET Bucket tagging 接口用于查询指定存储桶下已有的存储桶标签。
+  /// [bucketName]
+  /// [region]
+  Future<COSTagging> getBucketTagging({
+    String? bucketName,
+    String? region,
+  }) async {
+    final Response response =
+        await client.get('${getBaseApiUrl(bucketName, region)}/?tagging');
+    return toXml<COSTagging>(response)(COSTagging.fromXml);
+  }
+
+  /// COS 支持为已存在的 Bucket 删除标签（Tag）。
+  /// DELETE Bucket tagging 接口用于删除指定存储桶下已有的存储桶标签。
+  /// [bucketName]
+  /// [region]
+  Future<Response> deleteBucketTagging({
+    String? bucketName,
+    String? region,
+  }) async {
+    final Response response =
+        await client.delete('${getBaseApiUrl(bucketName, region)}/?tagging');
+    return toValidation(response);
+  }
+
   /// PUT Bucket accelerate 接口实现启用或者暂停存储桶的全球加速功能。
   /// [bucketName]
   /// [region]

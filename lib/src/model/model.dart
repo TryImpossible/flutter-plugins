@@ -5,6 +5,7 @@ export 'common/cos_config.dart';
 export 'common/cos_cors_configuration.dart';
 export 'common/cos_exception.dart';
 export 'common/cos_referer_configuration.dart';
+export 'common/cos_tagging.dart';
 export 'request/cos_acl_header.dart';
 export 'request/cos_create_bucket_configuration.dart';
 export 'request/cos_delete.dart';
