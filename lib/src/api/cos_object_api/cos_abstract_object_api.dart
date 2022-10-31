@@ -420,4 +420,78 @@ abstract class COSAbstractObjectApi extends COSAbstractApi with COSApiMixin {
     return toXml<COSAccessControlPolicy>(response)(
         COSAccessControlPolicy.fromXml);
   }
+
+  /// COS 支持为已存在的对象设置标签。PUT Object tagging 接口通过为对象添加键值对作为对象标签，可以协助您分组管理已有的对象资源
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [tagging]
+  /// [versionId]
+  Future<Response> putObjectTagging({
+    String? bucketName,
+    String? region,
+    required String objectKey,
+    required COSTagging tagging,
+    String? versionId,
+  }) async {
+    final Map<String, String> headers = <String, String>{};
+    final String xmlString = tagging.toXmlString();
+    // http 框架设置body时，会自动给 Content-Type 指定字符集为 charset=utf-8
+    // 设置 application/xml; charset=utf-8 保持一致
+    headers['Content-Type'] = 'application/xml; charset=utf-8';
+    headers['Content-Length'] = xmlString.length.toString();
+    final String md5String = Base64Encoder()
+        .convert(md5.convert(xmlString.codeUnits).bytes)
+        .toString();
+    headers['Content-MD5'] = md5String;
+    final Response response = await client.put(
+      '${getBaseApiUrl(bucketName, region)}/$objectKey?tagging',
+      headers: headers,
+      queryParameters: <String, String>{
+        if (versionId != null) 'versionId': versionId,
+      },
+      body: xmlString,
+    );
+    return toValidation(response);
+  }
+
+  /// GET Object tagging 接口用于查询指定对象下已有的对象标签。
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [versionId]
+  Future<COSTagging> getObjectTagging({
+    String? bucketName,
+    String? region,
+    required String objectKey,
+    String? versionId,
+  }) async {
+    final Response response = await client.get(
+      '${getBaseApiUrl(bucketName, region)}/$objectKey?tagging',
+      queryParameters: <String, String>{
+        if (versionId != null) 'versionId': versionId,
+      },
+    );
+    return toXml<COSTagging>(response)(COSTagging.fromXml);
+  }
+
+  /// DELETE Object tagging 接口用于删除指定对象下已有的对象标签。
+  /// [bucketName]
+  /// [region]
+  /// [objectKey]
+  /// [versionId]
+  Future<Response> deleteObjectTagging({
+    String? bucketName,
+    String? region,
+    required String objectKey,
+    String? versionId,
+  }) async {
+    final Response response = await client.delete(
+      '${getBaseApiUrl(bucketName, region)}/$objectKey?tagging',
+      queryParameters: <String, String>{
+        if (versionId != null) 'versionId': versionId,
+      },
+    );
+    return toValidation(response);
+  }
 }

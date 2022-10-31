@@ -200,4 +200,49 @@ void main() {
       fail('Did not expect a socket exception.');
     }
   });
+
+  test('PutBucketTagging Test', () async {
+    try {
+      final COSTagSet tagSet = COSTagSet()
+        ..tags = <COSTag>[
+          COSTag()
+            ..key = 'xxx'
+            ..value = 'xxx'
+        ];
+      final COSTagging tagging = COSTagging()..tagSet = tagSet;
+
+      final Response result = await COSApiFactory.bucketApi.putBucketTagging(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        tagging: tagging,
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
+
+  test('GetBucketTagging Test', () async {
+    try {
+      final COSTagging result = await COSApiFactory.bucketApi.getBucketTagging(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
+
+  test('DeleteBucketTagging Test', () async {
+    try {
+      final Response result = await COSApiFactory.bucketApi.deleteBucketTagging(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
 }

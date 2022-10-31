@@ -17,11 +17,12 @@ class COSClient extends _COSClientBase {
 
   /// PUT
   /// [url] 请求地址
-  /// [headers] 请求头
+  /// [queryParameters] 请求参数
   /// [body] 请求体
   Future<Response> put(
     String url, {
     Map<String, String>? headers,
+    Map<String, String>? queryParameters,
     Object? body,
   }) {
     return _request(

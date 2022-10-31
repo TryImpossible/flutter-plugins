@@ -261,4 +261,55 @@ void main() {
       fail('Did not expect a socket exception.');
     }
   });
+
+  test('PutObjectTagging Test', () async {
+    try {
+      final COSTagSet tagSet = COSTagSet()
+        ..tags = <COSTag>[
+          COSTag()
+            ..key = 'xxx'
+            ..value = 'xxx'
+        ];
+      final COSTagging tagging = COSTagging()..tagSet = tagSet;
+
+      final Response result = await COSApiFactory.objectApi.putObjectTagging(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        objectKey: 'xxx',
+        tagging: tagging,
+        versionId: 'xxx',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
+
+  test('getObjectTagging Test', () async {
+    try {
+      final COSTagging result = await COSApiFactory.objectApi.getObjectTagging(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        objectKey: 'xxx',
+        versionId: 'xxx',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
+
+  test('DeleteObjectTagging Test', () async {
+    try {
+      final Response result = await COSApiFactory.objectApi.deleteObjectTagging(
+        bucketName: 'xxx',
+        region: 'xxx-xxx',
+        objectKey: 'xxx',
+        versionId: 'xxx',
+      );
+      expect(result, isNotNull);
+    } on SocketException catch (_) {
+      fail('Did not expect a socket exception.');
+    }
+  });
 }
