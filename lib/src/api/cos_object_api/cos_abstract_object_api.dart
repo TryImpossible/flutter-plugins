@@ -80,15 +80,16 @@ abstract class COSAbstractObjectApi extends COSAbstractApi with COSApiMixin {
     COSACLHeader? aclHeader,
     Map<String, String> headers = const <String, String>{},
   }) async {
-    assert((objectValue != null && contentType == null) ||
-        (objectValue == null && contentType != null));
+    assert((objectValue != null && contentType != null) ||
+        (objectValue == null && contentType == null));
 
     final Map<String, String> newHeaders = Map.of(headers);
     if (aclHeader != null) {
       newHeaders.addAll(aclHeader.toMap());
     }
     if (objectValue != null && contentType != null) {
-      final String md5String = Base64Encoder().convert(objectValue).toString();
+      final String md5String =
+          Base64Encoder().convert(md5.convert(objectValue).bytes).toString();
       newHeaders['Content-Type'] = contentType;
       newHeaders['Content-Length'] = objectValue.length.toString();
       newHeaders['Content-MD5'] = md5String;
