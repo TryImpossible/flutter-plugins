@@ -34,7 +34,6 @@ class COSDeleted {
   }
 }
 
-
 class COSDeleteError {
   String? key;
   String? versionId;

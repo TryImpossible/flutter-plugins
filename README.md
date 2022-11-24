@@ -181,6 +181,42 @@ final COSAccelerateConfiguration result =
   );
 ```
 
+- 为存储桶设置键值对作为存储桶标签。
+
+```
+final COSTagSet tagSet = COSTagSet()
+    ..tags = <COSTag>[
+      COSTag()
+        ..key = 'xxx'
+        ..value = 'xxx'
+    ];
+  final COSTagging tagging = COSTagging()..tagSet = tagSet;
+
+  final Response result = await COSApiFactory.bucketApi.putBucketTagging(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    tagging: tagging,
+  );
+```
+
+- 查询指定存储桶下已有的存储桶标签。
+
+```
+final COSTagging result = await COSApiFactory.bucketApi.getBucketTagging(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+  );
+```
+
+- 删除指定存储桶下已有的存储桶标签。
+
+```
+final Response result = await COSApiFactory.bucketApi.deleteBucketTagging(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+  );
+```
+
 ### Object 接口
 
 - 列出该存储桶内的部分或者全部对象
@@ -308,13 +344,34 @@ final Response result = await COSApiFactory.objectApi.postObjectRestore(
 );
 ```
 
+- 上传文件对象
+
+```
+  final Response result = await COSApiFactory.objectApi.putFileObject(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    objectKey: 'xxx.png',
+    filePath: 'xxx.png',
+  );
+```
+
+- 上传文件夹对象
+
+```
+final Response result = await COSApiFactory.objectApi.putFolderObject(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    objectKey: '/folder',
+  );
+```
+
 - 上传目录
 
 ```
- final bool result = await COSApiFactory.objectApi.uploadDirectory(
+ final bool result = await COSApiFactory.objectApi.putDirectory(
     bucketName: 'xxx',
     region: 'xxx-xxx',
-    directory: 'xxx',
+    directory: '/directory',
   );
 ```
 
@@ -325,6 +382,70 @@ final Response result = await COSApiFactory.objectApi.postObjectRestore(
     bucketName: 'xxx',
     region: 'xxx-xxx',
     directory: 'xxx',
+  );
+```
+
+- 写入对象的访问控制列表（ACL）
+
+```
+  final Response result = await COSApiFactory.objectApi.putObjectACL(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    objectKey: 'xxx',
+    aclHeader: COSACLHeader()..xCosAcl = 'public-read',
+  );
+```
+
+- 获取对象的访问控制列表（ACL）
+
+```
+  final COSAccessControlPolicy result =
+      await COSApiFactory.objectApi.getObjectACL(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    objectKey: 'xxx',
+  );
+```
+
+- 为对象添加键值对作为对象标签
+
+```
+ final COSTagSet tagSet = COSTagSet()
+    ..tags = <COSTag>[
+      COSTag()
+        ..key = 'xxx'
+        ..value = 'xxx'
+    ];
+  final COSTagging tagging = COSTagging()..tagSet = tagSet;
+
+  final Response result = await COSApiFactory.objectApi.putObjectTagging(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    objectKey: 'xxx',
+    tagging: tagging,
+    versionId: 'xxx',
+  );
+```
+
+- 查询指定对象下已有的对象标签
+
+```
+  final COSTagging result = await COSApiFactory.objectApi.getObjectTagging(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    objectKey: 'xxx',
+    versionId: 'xxx',
+  );
+```
+
+- 删除指定对象下已有的对象标签
+
+```
+ final Response result = await COSApiFactory.objectApi.deleteObjectTagging(
+    bucketName: 'xxx',
+    region: 'xxx-xxx',
+    objectKey: 'xxx',
+    versionId: 'xxx',
   );
 ```
 
