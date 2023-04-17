@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+  <script src="https://unpkg.com/javascript-jsbridge-sdk@latest/dist/jsbridge.umd.js"></script>
+  <script>
+    // VConsole will be exported to `window.VConsole` by default.
+    var vConsole = new window.VConsole();
+  </script>
+</head>
+
+<body>
+  <h1>Javascript</h1>
+
+  <script>
+    var logPanel;
+    function print(msg) {
+      if (!logPanel) {
+        logPanel = document.querySelector('p');
+      }
+      if (logPanel.innerText) {
+        msg = logPanel.innerText + '\n' + msg;
+      }
+      logPanel.innerText = msg;
+      setTimeout(function () {
+        logPanel.scrollTop = logPanel.scrollHeight;
+      }, 0);
+    }
+
+    window.WebViewJSBridge.init({debug: true});
+    function registerHandlerCallback() {
+      print('[register handler]');
+      window.WebViewJSBridge.registerHandler('JSEcho', function (data, success, fail) {
+        success('success response from javascript');
+        // fail('fail response from javascript');
+      });
+    }
+
+    function registerHandlerPromise() {
+      print('[register handler]');
+      window.WebViewJSBridge.registerHandler('JSEcho', async function (data) {
+        // return Promise.resolve('success response from javascript');
+        return 'success response from javascript';
+        // return Promise.reject('fail response from javascript');
+        // throw Error('fail response from javascript');
+      });
+    }
+
+    function unregisterHandler() {
+      print('[unregister handler]');
+      window.WebViewJSBridge.unregisterHandler('JSEcho');
+    }
+
+    function callHandlerCallback() {
+      print('[call handler] handerName: FlutterEcho, data: request from javascript');
+      window.WebViewJSBridge.callHandler('FlutterEcho', {
+        data: 'request from javascript',
+        success: function (data) {
+          print('[call handler] success response: ' + data);
+        },
+        fail: function (err) {
+          print('[call handler] fail response: ' + err);
+        },
+      });
+    }
+
+    async function callHandlerPromise() {
+      print('[call handler] handerName: FlutterEcho, data: request from javascript');
+      try {
+        var data = await window.WebViewJSBridge.callHandler('FlutterEcho', {
+          data: 'request from javascript',
+        });
+        print('[call handler] success response: ' + data);
+      } catch (err) {
+        print('[call handler] fail response: ' + err);
+      }
+    }
+
+    function callNotExistHandler() {
+      print('[call handler] handerName: FlutterEchoNotExist, data: request from javascript');
+      window.WebViewJSBridge.callHandler('FlutterEchoNotExist', {
+        data: 'request from javascript',
+        success: function (data) {
+          print('[call handler] success response: ' + data);
+        },
+        fail: function (err) {
+          print('[call handler] fail response: ' + err);
+        },
+      });
+    }
+  </script>
+  <div>
+    <button onclick="registerHandlerCallback()" style="font-size: 20px;">registerHandler(callback模式)</button>
+    <button onclick="registerHandlerPromise()" style="font-size: 20px;">registerHandler(promise模式)</button>
+    <button onclick="unregisterHandler()" style="font-size: 20px;">unregisterHandler</button>
+    </br>
+    <button onclick="callHandlerCallback()" style="font-size: 20px;">callHandler(callback模式)</button>
+    <button onclick="callHandlerPromise()" style="font-size: 20px;">callHandler(promise模式)</button>
+    <button onclick="callNotExistHandler()" style="font-size: 20px;">callNotExistHandler</button>
+    <p style="height: 160px; background-color: rgba(128, 128, 128, 0.1); font-size:18px; overflow-y: scroll;"></p>
+  </div>
+</body>
+
+</html>
