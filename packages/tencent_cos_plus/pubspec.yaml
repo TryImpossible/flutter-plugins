@@ -1,6 +1,6 @@
 name: tencent_cos_plus
 description: A powerful tencent cos plugin, support bucket and object basic api.
-version: 1.2.0
+version: 1.2.1
 homepage: https://github.com/TryImpossible/flutter_tencent_cos_plus
 
 environment:

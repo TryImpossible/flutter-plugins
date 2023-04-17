@@ -14,7 +14,7 @@
 
 ```yaml
 dependencies:
-  tencent_cos_plus: ^1.0.0
+  tencent_cos_plus: ^1.2.1
 ```
 
 ```dart
@@ -476,7 +476,6 @@ COSApiFactory.get<XXXApi>(key)
 
 ## 其它
 
-[CSDN](https://blog.csdn.net/Ctrl_S/article/details/127407268?spm=1001.2014.3001.5502)
 
 [掘金](https://juejin.cn/post/7156105555067535373)
 
