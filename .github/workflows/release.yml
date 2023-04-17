@@ -1,0 +1,22 @@
+name: release
+on:
+#  push:
+#    branches:
+#      - main
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  publish_tencent_cos_plus:
+    runs-on: ubuntu-latest
+    steps:
+      - name: '[tencent_cos_plus] checkout Code'
+        uses: actions/checkout@main
+      - name: '[tencent_cos_plus] publish pub package'
+        uses: k-paxian/dart-package-publisher@master
+        with:
+          accessToken: ${{ secrets.PUB_ACCESS_TOKEN }}
+          refreshToken: ${{ secrets.PUB_REFRESH_TOKEN }}
+          relativePath: packages/tencent_cos_plus
+          skipTests: true
+          format: true

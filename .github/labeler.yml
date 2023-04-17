@@ -1,0 +1,2 @@
+'p: tencent_cos_plus':
+  - packages/tencent_cos_plus/**/*
