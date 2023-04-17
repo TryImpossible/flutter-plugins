@@ -1,7 +1,9 @@
 name: flutter_jsbridge_sdk
 description: A lightweight jsbridge for sending messages between flutter and javascript in WebViews.
-version: 1.0.1
-homepage: https://github.com/TryImpossible/flutter_jsbridge_sdk
+version: 1.0.2
+homepage: https://github.com/TryImpossible/flutter-plugins/tree/main/packages/flutter_jsbridge_sdk
+repository: https://github.com/TryImpossible/flutter-plugins/tree/main/packages/flutter_jsbridge_sdk
+issue_tracker: https://github.com/TryImpossible/flutter-plugins/issues
 
 environment:
   sdk: '>=2.18.5 <3.0.0'

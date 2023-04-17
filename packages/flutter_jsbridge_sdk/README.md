@@ -10,7 +10,7 @@
 - 支持取消注册方法
 - 支持Flutter和Javascript之间方法互相调用，传递参数、接收返回结果
 
-<img src="https://github.com/TryImpossible/flutter_jsbridge_sdk/raw/main/Simulator_Screen_Shot.png" width = 30% height = 30% />
+<img src="https://raw.githubusercontent.com/TryImpossible/flutter-plugins/main/packages/flutter_jsbridge_sdk/Simulator_Screen_Shot.png" width = 30% height = 30% />
 
 ## 开始
 
@@ -18,7 +18,7 @@
 
 ```yaml
 dependencies:
-  flutter_jsbridge_sdk: ^1.0.1
+  flutter_jsbridge_sdk: ^1.0.2
 ```
 
 ## Flutter用法
