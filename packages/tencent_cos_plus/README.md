@@ -479,6 +479,6 @@ COSApiFactory.get<XXXApi>(key)
 
 [掘金](https://juejin.cn/post/7156105555067535373)
 
-[issues](https://github.com/TryImpossible/flutter_tencent_cos_plus/issues)
+[issues](https://github.com/TryImpossible/flutter-plugins/issues)
 
 如果遇到问题，请及时向我们反馈。若此插件对您产生帮助，麻烦为我点亮⭐⭐⭐
