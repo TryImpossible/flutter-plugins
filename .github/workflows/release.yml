@@ -10,7 +10,7 @@ jobs:
   publish_tencent_cos_plus:
     runs-on: ubuntu-latest
     steps:
-      - name: '[tencent_cos_plus] checkout Code'
+      - name: '[tencent_cos_plus] checkout code'
         uses: actions/checkout@main
       - name: '[tencent_cos_plus] publish pub package'
         uses: k-paxian/dart-package-publisher@master
@@ -18,5 +18,19 @@ jobs:
           accessToken: ${{ secrets.PUB_ACCESS_TOKEN }}
           refreshToken: ${{ secrets.PUB_REFRESH_TOKEN }}
           relativePath: packages/tencent_cos_plus
+          skipTests: true
+          format: true
+
+  publish_flutter_jsbridge_sdk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: '[flutter_jsbridge_sdk] checkout code'
+        uses: actions/checkout@main
+      - name: '[flutter_jsbridge_sdk] publish pub package'
+        uses: k-paxian/dart-package-publisher@master
+        with:
+          accessToken: ${{ secrets.PUB_ACCESS_TOKEN }}
+          refreshToken: ${{ secrets.PUB_REFRESH_TOKEN }}
+          relativePath: packages/flutter_jsbridge_sdk
           skipTests: true
           format: true
