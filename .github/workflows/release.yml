@@ -47,5 +47,4 @@ jobs:
           refreshToken: ${{ secrets.PUB_REFRESH_TOKEN }}
           relativePath: packages/flutter_iframe_webview
           skipTests: true
-          format: true
           force: true
