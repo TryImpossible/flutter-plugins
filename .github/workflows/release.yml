@@ -34,3 +34,17 @@ jobs:
           relativePath: packages/flutter_jsbridge_sdk
           skipTests: true
           format: true
+
+  publish_flutter_iframe_webview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: '[flutter_iframe_webview] checkout code'
+        uses: actions/checkout@main
+      - name: '[flutter_iframe_webview] publish pub package'
+        uses: k-paxian/dart-package-publisher@master
+        with:
+          accessToken: ${{ secrets.PUB_ACCESS_TOKEN }}
+          refreshToken: ${{ secrets.PUB_REFRESH_TOKEN }}
+          relativePath: packages/flutter_iframe_webview
+          skipTests: true
+          format: true
