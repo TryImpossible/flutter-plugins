@@ -1,7 +1,9 @@
 name: flutter_iframe_webview
-description: A Flutter plugin that provides a WebView widget on web.
-version: 0.2.2+1
-homepage:
+description: A WebView widget on web, provides a solution for WebView to interact with JS.
+version: 1.0.0
+homepage: https://github.com/TryImpossible/flutter-plugins/tree/main/packages/flutter_iframe_webview
+repository: https://github.com/TryImpossible/flutter-plugins/tree/main/packages/flutter_iframe_webview
+issue_tracker: https://github.com/TryImpossible/flutter-plugins/issues
 
 environment:
   sdk: '>=2.19.2 <3.0.0'
