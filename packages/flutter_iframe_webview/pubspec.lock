@@ -214,10 +214,9 @@ packages:
   flutter_jsbridge_sdk:
     dependency: "direct main"
     description:
-      name: flutter_jsbridge_sdk
-      sha256: "9792c5b8482db969aa5da16405c4fe8b7507d6e4dc1208619bf42c44efec10ba"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../flutter_jsbridge_sdk"
+      relative: true
+    source: path
     version: "1.0.2"
   flutter_test:
     dependency: "direct dev"

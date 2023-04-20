@@ -1,0 +1,18 @@
+name: flutter_plugins
+repository: https://github.com/TryImpossible/flutter-plugins
+
+packages:
+  # Include the package in the workspace root.
+#  - .
+  # Include all packages inside the `packages` directory that are direct children.
+  - packages/*
+  # Include all packages inside the `packages` directory and all descendants.
+#  - packages/**
+
+ignore:
+  # e.g. ignore example apps
+  - 'packages/**/example'
+
+scripts:
+  analyze:
+    exec: dart analyze .
