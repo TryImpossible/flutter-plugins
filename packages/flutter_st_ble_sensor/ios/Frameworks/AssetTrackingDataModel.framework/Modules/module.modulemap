@@ -1,0 +1,11 @@
+framework module AssetTrackingDataModel {
+  umbrella header "AssetTrackingDataModel-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module AssetTrackingDataModel.Swift {
+  header "AssetTrackingDataModel-Swift.h"
+  requires objc
+}

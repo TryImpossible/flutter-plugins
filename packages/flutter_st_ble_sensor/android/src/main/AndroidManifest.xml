@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.flutter_st_ble_sensor">
+
+    <application>
+        <activity
+            android:name=".NodeListActivity"
+            android:exported="true" />
+    </application>
+</manifest>

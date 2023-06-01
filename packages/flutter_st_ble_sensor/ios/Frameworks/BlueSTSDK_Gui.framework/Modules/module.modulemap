@@ -1,0 +1,11 @@
+framework module BlueSTSDK_Gui {
+  umbrella header "BlueSTSDK_Gui-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module BlueSTSDK_Gui.Swift {
+  header "BlueSTSDK_Gui-Swift.h"
+  requires objc
+}

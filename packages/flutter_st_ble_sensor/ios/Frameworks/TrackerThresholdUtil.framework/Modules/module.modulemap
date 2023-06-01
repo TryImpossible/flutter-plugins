@@ -1,0 +1,11 @@
+framework module TrackerThresholdUtil {
+  umbrella header "TrackerThresholdUtil-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module TrackerThresholdUtil.Swift {
+  header "TrackerThresholdUtil-Swift.h"
+  requires objc
+}
