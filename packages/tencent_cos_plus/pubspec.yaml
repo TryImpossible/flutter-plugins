@@ -1,6 +1,6 @@
 name: tencent_cos_plus
 description: A powerful tencent cos plugin, support bucket and object basic api.
-version: 1.2.1
+version: 1.2.2
 homepage: https://github.com/TryImpossible/flutter-plugins/tree/main/packages/tencent_cos_plus
 repository: https://github.com/TryImpossible/flutter-plugins/tree/main/packages/tencent_cos_plus
 issue_tracker: https://github.com/TryImpossible/flutter-plugins/issues
@@ -10,19 +10,19 @@ environment:
 
 dependencies:
   # https://pub.flutter-io.cn/packages/path
-  path: ^1.8.1
+  path: ^1.8.3
   # https://pub.flutter-io.cn/packages/http
-  http: ^0.13.5
+  http: ^1.0.0
   # https://pub.flutter-io.cn/packages/http_parser
-  http_parser: ^4.0.1
+  http_parser: ^4.0.2
   # https://pub.flutter-io.cn/packages/mime
-  mime: ^1.0.2
+  mime: ^1.0.4
   # https://pub.flutter-io.cn/packages/html
-  html: ^0.15.0
+  html: ^0.15.4
   # https://pub.flutter-io.cn/packages/crypto
-  crypto: ^3.0.2
+  crypto: ^3.0.3
   # https://pub.flutter-io.cn/packages/xml
-  xml: ^6.1.0
+  xml: ^6.3.0
 
 dev_dependencies:
   lints: ^2.0.0
