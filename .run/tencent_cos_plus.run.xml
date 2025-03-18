@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="tencent_cos_plus" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+    <option name="filePath" value="$PROJECT_DIR$/packages/tencent_cos_plus/example/tencent_cos_plus_example.dart" />
+    <method v="2" />
+  </configuration>
+</component>

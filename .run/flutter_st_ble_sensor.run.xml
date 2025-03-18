@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="flutter_st_ble_sensor" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/packages/flutter_st_ble_sensor/example/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>
