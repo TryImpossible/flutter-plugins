@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="flutter_outline_vpn" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/packages/flutter_outline_vpn/example/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>
