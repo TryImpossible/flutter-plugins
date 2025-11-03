@@ -9,11 +9,7 @@ import '../model/model.dart' show COSConfig;
 
 /// COS请求
 class COSClient extends _COSClientBase {
-  factory COSClient(COSConfig config) =>
-      _instance ??= COSClient._internal(config);
-  static COSClient? _instance;
-
-  COSClient._internal(super.config);
+  COSClient(super.config);
 
   /// PUT
   /// [url] 请求地址
@@ -183,6 +179,9 @@ class _COSClientBase {
     }
     request.headers['Host'] = uri.authority;
     request.headers['Date'] = formatHttpDate(DateTime.now());
+    if (config.sessionToken != null) {
+      request.headers['x-cos-security-token'] = config.sessionToken!;
+    }
 
     final String authorization = _generateSign(
       method: request.method,
